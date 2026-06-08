@@ -11,7 +11,9 @@ def index():
 
 @app.route('/weather')
 def get_weather():
-    city = request.args.get('city')
+    # default to '' (not None) so a MISSING ?city= param is treated the same
+    # as a blank one below, instead of crashing on None.strip()
+    city = request.args.get('city', '')
 
     # check for empty strings or string with only spaces
     if not bool(city.strip()):
