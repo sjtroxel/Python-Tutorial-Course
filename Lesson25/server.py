@@ -35,4 +35,7 @@ def get_weather():
 
 
 if __name__ == "__main__":
+    # waitress (unlike Flask's dev server) prints nothing on startup, so the
+    # terminal looks dead even though it's serving. Print a banner ourselves.
+    print("Serving on http://localhost:8000  (Ctrl+C to stop)")
     serve(app, host="0.0.0.0", port=8000)

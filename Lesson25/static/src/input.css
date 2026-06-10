@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+/* v4 is CSS-first: define design tokens here instead of tailwind.config.js */
+@theme {
+  --color-brand: #38bdf8;
+  --font-display: "Segoe UI", system-ui, sans-serif;
+}
+
+/* Tell v4 which files to scan for class names (the "content" step). */
+@source "../../templates/**/*.html";

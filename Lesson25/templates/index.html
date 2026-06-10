@@ -4,14 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get Weather Conditions</title>
-    <link href="{{ url_for('static', filename='styles/style.css')}}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='styles/output.css') }}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
 </head>
 
-<body>
-    <h1>Get Weather Conditions</h1>
-    <form action="/weather">
-        <input type="text" name="city" id="city" placeholder="Enter a City!" />
-        <button type="submit">Submit</button>
+<body class="min-h-screen bg-linear-to-b from-slate-900 to-slate-800 text-slate-100 font-display flex flex-col items-center justify-center gap-8 px-4 py-10 sm:gap-10 sm:p-8">
+    <header class="flex flex-col items-center gap-3 text-center">
+        <p class="text-sm font-semibold uppercase tracking-[0.3em] text-brand/80">Weather</p>
+        <h1 class="text-4xl font-bold tracking-tight text-brand sm:text-5xl">Get Weather Conditions</h1>
+        <p class="max-w-sm text-base text-slate-400 sm:text-lg">Type a city to see the current sky, temperature, and what it feels like outside.</p>
+    </header>
+
+    <form action="/weather" class="flex w-full max-w-md flex-col gap-4 sm:flex-row">
+        <input type="text" name="city" id="city" placeholder="Enter a City!"
+            class="flex-1 rounded-xl bg-slate-700/60 px-5 py-3 text-lg placeholder-slate-400 outline-none ring-1 ring-slate-600 transition focus:ring-2 focus:ring-brand" />
+        <button type="submit"
+            class="rounded-xl bg-brand px-6 py-3 text-lg font-semibold text-slate-900 transition hover:brightness-110 active:scale-95">Submit</button>
     </form>
+
+    <script>
+        gsap.from("header", { y: -24, opacity: 0, duration: 0.6, ease: "power2.out" });
+        gsap.from("form", { y: 24, opacity: 0, duration: 0.6, delay: 0.15, ease: "power2.out" });
+    </script>
 </body>
 </html>
