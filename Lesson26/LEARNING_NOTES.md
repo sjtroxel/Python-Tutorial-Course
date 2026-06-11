@@ -151,5 +151,39 @@ SQLAlchemy object directly (instead of requiring a plain dict).
     didn't do that either, so we matched it for parity.
 - DELETE returns the remaining list of users (matches Lesson 24).
 
-### Stage 4 — tests with FastAPI TestClient  [pending]
-- (to be filled in)
+### Stage 4 — tests with FastAPI TestClient  [done]
+- `test_main.py`, 11 tests, mirrors Lesson24/test_api.py coverage. All pass.
+- Run: `cd Lesson26 && .venv/bin/python -m pytest test_main.py -v`
+- FastAPI's `TestClient` (Starlette, backed by httpx) = the in-memory fake browser,
+  same role Flask's `test_client()` played.
+- **The DI payoff, made concrete.** Database isolation in tests:
+  - Lesson 24: had to reach into a Flask-SQLAlchemy PRIVATE internal
+    (`db._app_engines[app][None]`) because the engine locked at import time. ~25 lines
+    of docstring explaining the hack.
+  - Lesson 26: ONE supported line —
+    `app.dependency_overrides[get_db] = override_get_db` — points the tests at a
+    throwaway in-memory SQLite db without touching `main.py`. This is *why* DI exists.
+  - `StaticPool` + `"sqlite://"` keeps one shared in-memory connection so the db
+    survives across requests within a test.
+- Behavior differences the tests encode vs Lesson 24:
+  - missing required field -> **422** (Pydantic) vs Lesson 24's **400** (reqparse).
+  - POST returns the **created user** vs Lesson 24's full list.
+- Deprecation warning `install httpx2 instead`: cosmetic, from bleeding-edge
+  Starlette/FastAPI versions. Tests pass; safe to ignore.
+
+---
+
+## Where this leaves me
+
+Full CRUD users API rebuilt in FastAPI with tests, as a controlled port of Lesson 24.
+Concepts now seen in working code, not just read about:
+- Decorator routes vs Resource classes
+- Pydantic for both input validation (422) and output shaping (response_model)
+- Typed path params (`{id}` + `id: int`)
+- HTTPException vs abort
+- Hand-wired SQLAlchemy (what Flask-SQLAlchemy was hiding)
+- Dependency injection — and its concrete testing payoff
+- Auto Swagger docs at /docs
+
+Possible next steps if I revisit: a real partial PATCH (Optional fields), async routes,
+splitting schemas/models/routes into separate files (the "real project" layout).
